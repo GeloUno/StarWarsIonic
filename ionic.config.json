@@ -1,5 +1,7 @@
 {
   "name": "geloAppTabs",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

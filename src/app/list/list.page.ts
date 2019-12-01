@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { PeopelsHttpsService } from '../services/peopels-https.service';
+import { Peoples } from '../model/peoples';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -6,34 +9,42 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['list.page.scss']
 })
 export class ListPage implements OnInit {
+  peoplesData: Peoples[];
   private selectedItem: any;
-  private icons = [
-    'flask',
-    'wifi',
-    'beer',
-    'football',
-    'basketball',
-    'paper-plane',
-    'american-football',
-    'boat',
-    'bluetooth',
-    'build'
-  ];
-  public items: Array<{ title: string; note: string; icon: string }> = [];
-  constructor() {
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
-    }
+
+  constructor(
+    private peoplesHttpsService: PeopelsHttpsService,
+    private router: Router
+  ) {
+    this.peoplesHttpsService.getPostAll().subscribe(data => {
+      console.log(data);
+      console.log(data.length);
+      this.peoplesData = data;
+    });
   }
 
-  ngOnInit() {
+  ngOnInit() {}
+  onClick(namePeople) {
+    console.log(namePeople);
+    //  this.router.navigate(['detail']);
   }
-  // add back when alpha.4 is out
-  // navigate(item) {
-  //   this.router.navigate(['/list', JSON.stringify(item)]);
-  // }
+  setNext() {
+    this.peoplesHttpsService.setNextUrl(this.peoplesData['next']);
+    this.peoplesData = null;
+    // setTimeout(a => {
+    this.peoplesHttpsService.getPostAll().subscribe(data => {
+      this.peoplesData = data;
+    });
+    // }, 100); // Time animation
+  }
+
+  setPrevious() {
+    this.peoplesHttpsService.setPreviousUrl(this.peoplesData['previous']);
+    this.peoplesData = null;
+    // setTimeout(b => {
+    this.peoplesHttpsService.getPostAll().subscribe(data => {
+      this.peoplesData = data;
+    });
+    // }, 100); // Time animation
+  }
 }

@@ -4,24 +4,48 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      List
+      Star Wars Peoples
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="peoplesData!=null;">
   <ion-list>
-    <ion-item *ngFor="let item of items">
-      <ion-icon [name]="item.icon" slot="start"></ion-icon>
-      {{item.title}}
-      <div class="item-note" slot="end">
-        {{item.note}}
-      </div>
+    <ion-item
+      *ngFor="let itemPeople of peoplesData['results']"
+      (click)="onClick(itemPeople['name'])"
+    >
+     
+      <ion-card-content  [routerLink]="itemPeople['name']" >       
+        {{itemPeople.name}}
+      </ion-card-content>
+      <ion-card-content slot="end">
+        >>>
+      </ion-card-content>
+     
     </ion-item>
   </ion-list>
-  <!--
-    <div *ngIf="selectedItem" padding>
-      You navigated here from <b>{{selectedItem.title }}</b>
-    </div>
-  -->
+
+  
+<div class="ion-text-center">
+  <ion-button color="primary"    
+  *ngIf="peoplesData!=null && peoplesData['previous']!=null"
+  (click)="setPrevious()"
+>
+  Previous
+</ion-button>
+
+<ion-button color="primary"
+  *ngIf="peoplesData!=null && peoplesData['next']!=null"
+  (click)="setNext()"
+>
+  Next
+</ion-button>
+</div>
+</ion-content>
+<!-- if then else dont work check it future witch ng-template-->
+<ion-content class="ion-text-center" *ngIf="peoplesData==null;">
+  <h1>
+    <ion-spinner name="bubbles"></ion-spinner>
+  </h1> 
 </ion-content>
